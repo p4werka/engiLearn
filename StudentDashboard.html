@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Виртуальный кампус — Личный кабинет</title>
+  <meta name="description" content="Личный кабинет ученика — Виртуальный кампус" />
+  <style>
+    :root{
+      --bg:#07111a;
+      --panel:rgba(255,255,255,0.03);
+      --muted:#9aa6b2;
+      --accent:#3b82f6;
+      --accent-2:#ffd166;
+      --max-w:1100px;
+      --gap:18px;
+      --radius:12px;
+      --glass:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:linear-gradient(180deg,#07111a 0%, #0b1722 100%);color:#e6eef6;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}
+    .wrap{max-width:var(--max-w);margin:24px auto;padding:20px}
+
+    .top{display:flex;gap:20px;align-items:center;justify-content:space-between}
+    .title{font-weight:800;font-size:24px}
+    .sub{color:var(--muted);font-size:13px}
+
+    .panel{background:var(--glass);border-radius:var(--radius);padding:18px;box-shadow:0 8px 30px rgba(2,6,23,0.7)}
+    .grid{display:grid;grid-template-columns:320px 1fr;gap:18px;margin-top:18px}
+
+    .profile-card{background:var(--panel);border-radius:12px;padding:14px}
+    .avatar{width:84px;height:84px;border-radius:12px;background:linear-gradient(135deg,#6ee7b7,#3b82f6);display:flex;align-items:center;justify-content:center;font-weight:800;color:#042027;font-size:28px}
+    .meta{margin-top:12px}
+    .meta-row{display:flex;justify-content:space-between;align-items:center}
+    .field{font-size:13px;color:var(--muted);margin:8px 0}
+    .label{color:var(--muted);font-size:12px}
+    .value{font-weight:700}
+
+    .stats{display:flex;gap:12px;margin-top:12px}
+    .stat{flex:1;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:10px;border-radius:10px;text-align:center}
+    .stat .num{font-weight:800;font-size:18px}
+    .edit-btn{display:inline-block;padding:8px 10px;border-radius:8px;border:none;background:var(--accent);color:#06121a;font-weight:800;cursor:pointer}
+    .link-btn{display:inline-block;padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--muted);cursor:pointer}
+
+    .main-panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:16px}
+    .section{margin-bottom:14px}
+    .section h3{margin:0 0 8px 0;font-size:16px}
+    table{width:100%;border-collapse:collapse}
+    td{padding:8px 6px;border-top:1px solid rgba(255,255,255,0.02)}
+
+    .controls{display:flex;gap:8px;flex-wrap:wrap}
+
+    form .row{display:flex;gap:10px}
+    form input, form select{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    .small{max-width:200px}
+
+    .notice{font-size:13px;color:var(--muted);margin-top:8px}
+
+    @media (max-width:880px){.grid{grid-template-columns:1fr}.top{flex-direction:column;align-items:flex-start}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <div class="title">Личный кабинет ученика</div>
+        <div class="sub">Здесь отображаются основные данные профиля, прогресс и привязки</div>
+      </div>
+      <div class="controls">
+        <a href="#" id="backLink" class="link-btn">&larr; К списку курсов</a>
+        <button id="editToggle" class="edit-btn">Редактировать профиль</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <aside class="profile-card">
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="avatar" id="avatar">А</div>
+          <div>
+            <div id="fullName" style="font-weight:800">Анна Иванова Петровна</div>
+            <div class="sub" id="roleText">Ученик / Студент</div>
+          </div>
+        </div>
+
+        <div class="meta">
+          <div class="field"><span class="label">Дата рождения:</span> <div class="value" id="dob">01.01.2006</div></div>
+          <div class="field"><span class="label">Место обучения:</span> <div class="value" id="school">Школа №1</div></div>
+          <div class="field"><span class="label">Email:</span> <div class="value" id="email">anna@example.com</div></div>
+          <div class="field"><span class="label">Уровень образования:</span> <div class="value" id="eduLevel">Среднее</div></div>
+          <div class="field"><span class="label">Специальность / направление:</span> <div class="value" id="specialty">—</div></div>
+          <div class="field"><span class="label">Год окончания:</span> <div class="value" id="gradYear">2024</div></div>
+          <div class="field"><span class="label">Работа:</span> <div class="value" id="work">Нет</div></div>
+
+          <div style="margin-top:12px">
+            <div style="display:flex;gap:8px">
+              <button id="linkVK" class="link-btn">Привязать ВКонтакте</button>
+              <button id="linkGos" class="link-btn">Привязать Госуслуги</button>
+            </div>
+            <div class="notice">Привязки в этой демо-версии имитируются локально (локальное хранилище). Настоящая интеграция требует OAuth и серверной части.</div>
+          </div>
+
+          <div class="stats">
+            <div class="stat"><div class="num" id="coursesCount">3</div><div class="sub" style="color:var(--muted)">Пройдено курсов</div></div>
+            <div class="stat"><div class="num" id="avgGrade">4.5</div><div class="sub" style="color:var(--muted)">Средняя оценка</div></div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="main-panel panel">
+        <div class="section">
+          <h3>Общая информация</h3>
+          <table>
+            <tr><td style="width:40%">Фамилия</td><td id="fieldLast">Иванова</td></tr>
+            <tr><td>Имя</td><td id="fieldFirst">Анна</td></tr>
+            <tr><td>Отчество</td><td id="fieldMiddle">Петровна</td></tr>
+            <tr><td>Дата рождения</td><td id="fieldDob">01.01.2006</td></tr>
+            <tr><td>Место обучения</td><td id="fieldSchool">Школа №1</td></tr>
+            <tr><td>Уровень образования</td><td id="fieldEdu">Среднее</td></tr>
+            <tr><td>Специальность</td><td id="fieldSpec">—</td></tr>
+            <tr><td>Год окончания</td><td id="fieldGrad">2024</td></tr>
+            <tr><td>Email</td><td id="fieldEmail">anna@example.com</td></tr>
+            <tr><td>Работа</td><td id="fieldWork">Нет</td></tr>
+            <tr><td>VK привязка</td><td id="fieldVK">Не привязано</td></tr>
+            <tr><td>Госуслуги</td><td id="fieldGos">Не привязано</td></tr>
+          </table>
+        </div>
+
+        <div class="section">
+          <h3>Пройденные курсы и оценки</h3>
+          <div id="coursesList">(Здесь показаны пройденные курсы)</div>
+        </div>
+
+        <div class="section">
+          <h3>Сохранённые данные</h3>
+          <div class="notice">Данные профиля в этой демо-странице сохраняются в localStorage (ключ <code>vc_user</code>), чтобы можно было продолжать работу без сервера.</div>
+          <div style="margin-top:10px"><button id="saveBtn" class="edit-btn">Сохранить в localStorage</button> <button id="clearBtn" class="link-btn">Удалить данные</button></div>
+        </div>
+
+        <div class="section" style="display:flex;justify-content:flex-end;gap:8px">
+          <button id="toCourses" class="edit-btn">Перейти к выбору курсов</button>
+        </div>
+
+        <!-- Режим редактирования формы (скрыта по умолчанию) -->
+        <div id="editForm" style="display:none;margin-top:14px;border-top:1px solid rgba(255,255,255,0.03);padding-top:12px">
+          <h3>Редактировать профиль</h3>
+          <form id="profileForm">
+            <div class="row" style="gap:12px">
+              <div style="flex:1"><label class="label">Фамилия<input name="last" /></label></div>
+              <div style="flex:1"><label class="label">Имя<input name="first" /></label></div>
+              <div style="flex:1"><label class="label">Отчество<input name="middle" /></label></div>
+            </div>
+            <div class="row" style="margin-top:8px">
+              <div style="flex:1"><label class="label">Дата рождения<input name="dob" placeholder="дд.мм.гггг"/></label></div>
+              <div style="flex:1"><label class="label">Email<input name="email" type="email"/></label></div>
+              <div style="flex:1"><label class="label">Год окончания<input name="grad" class="small"/></label></div>
+            </div>
+            <div class="row" style="margin-top:8px">
+              <div style="flex:1"><label class="label">Место обучения<input name="school"/></label></div>
+              <div style="flex:1"><label class="label">Уровень образования<select name="edu"><option>Среднее</option><option>Высшее</option><option>Другое</option></select></label></div>
+              <div style="flex:1"><label class="label">Специальность<input name="spec"/></label></div>
+            </div>
+            <div style="margin-top:10px;display:flex;gap:8px"><button type="submit" class="edit-btn">Сохранить</button><button type="button" id="cancelEdit" class="link-btn">Отмена</button></div>
+          </form>
+        </div>
+
+      </section>
+    </div>
+  </div>
+
+<script>
+// Примеры данных — в реальном проекте сюда придёт API
+const defaultUser = {
+  last:'Иванова', first:'Анна', middle:'Петровна', dob:'01.01.2006',
+  school:'Школа №1', email:'anna@example.com', edu:'Среднее', spec:'', grad:'2024', work:'Нет',
+  vk:false, gos:false,
+  courses:[{id:1,title:'Физика',grade:5},{id:2,title:'Информатика',grade:4},{id:3,title:'Химия',grade:4}]
+};
+
+const STORAGE_KEY = 'vc_user';
+
+function loadUser(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(defaultUser));
+  }catch(e){return JSON.parse(JSON.stringify(defaultUser));}
+}
+
+function saveUser(user){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+}
+
+function renderUser(){
+  const u = loadUser();
+  document.getElementById('fullName').textContent = `${u.first} ${u.last} ${u.middle}`;
+  document.getElementById('avatar').textContent = (u.first||'A')[0] + (u.last||'')[0];
+  document.getElementById('roleText').textContent = u.school && u.school.toLowerCase().includes('школ') ? 'Ученик' : 'Студент / Слушатель';
+  document.getElementById('dob').textContent = u.dob;
+  document.getElementById('school').textContent = u.school;
+  document.getElementById('email').textContent = u.email;
+  document.getElementById('eduLevel').textContent = u.edu;
+  document.getElementById('specialty').textContent = u.spec || '—';
+  document.getElementById('gradYear').textContent = u.grad || '—';
+  document.getElementById('work').textContent = u.work || '—';
+
+  // fields
+  document.getElementById('fieldLast').textContent = u.last || '';
+  document.getElementById('fieldFirst').textContent = u.first || '';
+  document.getElementById('fieldMiddle').textContent = u.middle || '';
+  document.getElementById('fieldDob').textContent = u.dob || '';
+  document.getElementById('fieldSchool').textContent = u.school || '';
+  document.getElementById('fieldEdu').textContent = u.edu || '';
+  document.getElementById('fieldSpec').textContent = u.spec || '—';
+  document.getElementById('fieldGrad').textContent = u.grad || '';
+  document.getElementById('fieldEmail').textContent = u.email || '';
+  document.getElementById('fieldWork').textContent = u.work || '';
+  document.getElementById('fieldVK').textContent = u.vk ? 'Привязано' : 'Не привязано';
+  document.getElementById('fieldGos').textContent = u.gos ? 'Привязано' : 'Не привязано';
+
+  // stats
+  document.getElementById('coursesCount').textContent = u.courses.length;
+  const avg = u.courses.length ? (u.courses.reduce((s,c)=>s+(c.grade||0),0)/u.courses.length).toFixed(2) : '—';
+  document.getElementById('avgGrade').textContent = avg;
+
+  // courses list
+  const list = document.getElementById('coursesList');
+  list.innerHTML = '';
+  if(u.courses.length){
+    const tbl = document.createElement('table'); tbl.style.width='100%';
+    u.courses.forEach(c=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML = `<td style="width:70%">${c.title}</td><td style="text-align:right">Оценка: <strong>${c.grade}</strong></td>`;
+      tbl.appendChild(tr);
+    });
+    list.appendChild(tbl);
+  } else {
+    list.textContent = 'Нет пройденных курсов.';
+  }
+}
+
+renderUser();
+
+// Навигация: возврат к списку курсов — пытаемся history.back, затем UserMainTheme.html, затем index.html
+(function(){
+  const backLink = document.getElementById('backLink');
+  backLink.addEventListener('click', (e)=>{
+    e.preventDefault();
+    try{
+      const ref = document.referrer || '';
+      if(ref.length>0){
+        const refOrigin = (new URL(ref)).origin;
+        if(refOrigin === location.origin && history.length>1){
+          history.back();
+          setTimeout(()=>{
+            if(location.pathname.endsWith('StudentDashboard.html') || location.pathname.endsWith('/StudentDashboard.html')){
+              location.href = 'UserMainTheme.html';
+            }
+          },300);
+          return;
+        }
+      }
+    }catch(e){}
+    // fallback list
+    if(location.pathname.endsWith('UserMainTheme.html')) location.href = 'UserMainTheme.html';
+    else location.href = 'UserMainTheme.html';
+  });
+})();
+
+// Кнопка "Перейти к выбору курсов"
+document.getElementById('toCourses').addEventListener('click', ()=>{ window.location.href='UserMainTheme.html'; });
+
+// Редактирование профиля
+const editToggle = document.getElementById('editToggle');
+const editForm = document.getElementById('editForm');
+const profileForm = document.getElementById('profileForm');
+const cancelEdit = document.getElementById('cancelEdit');
+
+editToggle.addEventListener('click', ()=>{ editForm.style.display = editForm.style.display === 'none' ? 'block' : 'none'; });
+cancelEdit.addEventListener('click', ()=>{ editForm.style.display='none'; });
+
+// Заполнить форму текущими данными
+function fillForm(){
+  const u = loadUser();
+  profileForm.elements['last'].value = u.last || '';
+  profileForm.elements['first'].value = u.first || '';
+  profileForm.elements['middle'].value = u.middle || '';
+  profileForm.elements['dob'].value = u.dob || '';
+  profileForm.elements['email'].value = u.email || '';
+  profileForm.elements['grad'].value = u.grad || '';
+  profileForm.elements['school'].value = u.school || '';
+  profileForm.elements['edu'].value = u.edu || '';
+  profileForm.elements['spec'].value = u.spec || '';
+}
+
+editToggle.addEventListener('click', fillForm);
+
+profileForm.addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const u = loadUser();
+  u.last = profileForm.elements['last'].value || u.last;
+  u.first = profileForm.elements['first'].value || u.first;
+  u.middle = profileForm.elements['middle'].value || u.middle;
+  u.dob = profileForm.elements['dob'].value || u.dob;
+  u.email = profileForm.elements['email'].value || u.email;
+  u.grad = profileForm.elements['grad'].value || u.grad;
+  u.school = profileForm.elements['school'].value || u.school;
+  u.edu = profileForm.elements['edu'].value || u.edu;
+  u.spec = profileForm.elements['spec'].value || u.spec;
+  saveUser(u);
+  renderUser();
+  editForm.style.display='none';
+});
+
+// Сохранение / очистка данных
+document.getElementById('saveBtn').addEventListener('click', ()=>{ const u = loadUser(); saveUser(u); alert('Данные сохранены локально (localStorage).'); });
+document.getElementById('clearBtn').addEventListener('click', ()=>{ localStorage.removeItem(STORAGE_KEY); renderUser(); alert('Данные удалены.'); });
+
+// Имитация привязки ВК и Госуслуг — в демо сохраняем флаг в localStorage
+document.getElementById('linkVK').addEventListener('click', ()=>{
+  const u = loadUser(); u.vk = !u.vk; saveUser(u); renderUser(); alert(u.vk ? 'ВКонтакте привязано (демо).' : 'ВКонтакте отвязано (демо).');
+});
+
+document.getElementById('linkGos').addEventListener('click', ()=>{
+  const u = loadUser(); u.gos = !u.gos; saveUser(u); renderUser(); alert(u.gos ? 'Госуслуги привязаны (демо).' : 'Госуслуги отвязаны (демо).');
+});
+
+// Инициализация: если нет данных в localStorage — записываем дефолт
+if(!localStorage.getItem(STORAGE_KEY)) saveUser(defaultUser);
+renderUser();
+
+</script>
+</body>
+</html>

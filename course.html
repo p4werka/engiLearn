@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Виртуальный кампус — Курс</title>
+<meta name="description" content="Страница курса — Виртуальный кампус" />
+<style>
+  :root{
+    --bg:#07111a;
+    --panel:rgba(255,255,255,0.03);
+    --muted:#9aa6b2;
+    --accent:#3b82f6;
+    --accent-2:#ffd166;
+    --max-w:1100px;
+    --gap:18px;
+    --radius:12px;
+    --glass:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  }
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:linear-gradient(180deg,#07111a 0%, #0b1722 100%);color:#e6eef6;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none}
+  .wrap{max-width:var(--max-w);margin:24px auto;padding:20px}
+  .top{display:flex;gap:20px;align-items:flex-start}
+  .hero{
+    flex:1 1 0;
+    background:var(--glass);
+    border-radius:var(--radius);
+    padding:18px;
+    box-shadow:0 8px 30px rgba(2,6,23,0.7);
+  }
+  .sidebar{
+    width:320px;
+    background:var(--panel);
+    border-radius:var(--radius);
+    padding:16px;
+    position:sticky;
+    top:20px;
+    height:fit-content;
+  }
+  .title{font-weight:800;font-size:28px;margin:0 0 6px}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:12px}
+  .badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .badge{background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:999px;font-size:13px;color:var(--muted)}
+  .screens{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .shot{width:140px;height:90px;border-radius:8px;background:linear-gradient(135deg,#1f2937,#111827);display:flex;align-items:center;justify-content:center;font-weight:800;color:#cbd5e1}
+  .meta-row{display:flex;justify-content:space-between;gap:8px}
+  .meta-item{font-size:13px;color:var(--muted);margin:8px 0}
+  .big-cta{display:block;width:100%;padding:12px 14px;border-radius:10px;background:var(--accent);color:#06121a;font-weight:800;border:none;cursor:pointer;margin-top:12px}
+  .info-block{margin-top:12px;color:var(--muted);font-size:14px}
+  .section{margin-top:20px}
+  h2{margin:0 0 10px 0;font-size:18px}
+  p{color:var(--muted);line-height:1.45}
+  ul{color:var(--muted);padding-left:18px}
+  .stations{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
+  .station{background:rgba(255,255,255,0.01);padding:12px;border-radius:10px}
+  .station .s-title{font-weight:700;margin-bottom:6px}
+  .s-cta{padding:8px 10px;border-radius:8px;border:none;background:var(--accent);color:#06121a;font-weight:800;cursor:pointer}
+  .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .tag{background:rgba(255,255,255,0.02);padding:6px 8px;border-radius:999px;color:var(--muted);font-size:13px}
+  .similar{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .sim-card{background:rgba(255,255,255,0.02);padding:8px;border-radius:8px;min-width:160px}
+  .dev{font-weight:700}
+  .pill{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);font-weight:700;font-size:13px}
+  header.breadcrumb{margin-bottom:12px;display:flex;align-items:center;gap:12px}
+  header.breadcrumb a{color:var(--muted);font-weight:700}
+  @media (max-width:920px){.top{flex-direction:column}.sidebar{position:static;width:100%}}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- ссылка назад: кликабельная, с id для JS -->
+    <header class="breadcrumb">
+      <a href="index.html" id="backLink">&larr; К списку курсов</a>
+      <div style="color:var(--muted);font-size:13px">/ подробная страница курса</div>
+    </header>
+
+    <div class="top">
+      <div class="hero" id="hero">
+        <div class="meta-row">
+          <div>
+            <div class="title" id="courseTitle">Курс</div>
+            <div class="sub" id="courseDesc">Краткое описание курса…</div>
+            <div class="badges" id="badges"></div>
+          </div>
+          <div style="min-width:140px;text-align:right">
+            <div class="pill" id="typePill">Тип</div>
+            <div style="margin-top:10px;color:var(--muted);font-size:13px" id="duration">Длительность: —</div>
+          </div>
+        </div>
+
+        <div class="section" id="aboutSection">
+          <h2>О курсе</h2>
+          <p id="aboutText"></p>
+        </div>
+
+        <div class="section" id="goalsSection">
+          <h2>Цели курса</h2>
+          <ul id="goalsList"></ul>
+        </div>
+
+        <div class="section" id="tasksSection">
+          <h2>Задачи</h2>
+          <ul id="tasksList"></ul>
+        </div>
+
+        <div class="section" id="stationsSection">
+          <h2>Станки и модули</h2>
+          <div class="stations" id="stationsList"></div>
+        </div>
+
+        <div class="section" id="screensSection">
+          <h2>Скриншоты / примеры</h2>
+          <div class="screens" id="shots"></div>
+        </div>
+
+        <div class="section" id="similarSection">
+          <h2>Похожие курсы</h2>
+          <div class="similar" id="similarList"></div>
+        </div>
+      </div>
+
+      <aside class="sidebar" id="sidebar">
+        <div style="display:flex;gap:12px;align-items:center">
+          <div style="width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#6ee7b7,#3b82f6);display:flex;align-items:center;justify-content:center;font-weight:800">К</div>
+          <div>
+            <div class="dev" id="devName">Разработчик</div>
+            <div style="color:var(--muted);font-size:13px" id="devInfo">Компания</div>
+          </div>
+        </div>
+
+        <div class="info-block">
+          <div class="meta-item"><strong>Тип:</strong> <span id="typeText"></span></div>
+          <div class="meta-item"><strong>Ориентир:</strong> <span id="lessonsCount">—</span> уроков</div>
+          <div class="meta-item"><strong>Теги:</strong></div>
+          <div class="tags" id="tagCloud"></div>
+        </div>
+
+        <button class="big-cta" id="startBtn">Начать курс</button>
+
+        <div class="info-block" style="margin-top:14px">
+          <div style="font-size:13px;color:var(--muted)">Доступ:</div>
+          <div style="margin-top:6px"><span id="accessInfo" class="badge" style="background:rgba(255,255,255,0.02);padding:6px 8px;border-radius:8px"></span></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+<script>
+/* ====== Данные курсов: сюда добавь/отредактируй информацию по каждому курсу ====== */
+const courses = [
+  {id:1,title:'Физика',desc:'Механика, электродинамика, оптика',company:'ЛабИнжПроект',proprietary:true,
+    duration:'9 уроков, 3 практики',tags:['физика','лабы'],lessons:9,
+    goals:['Понять законы механики','Изучить основы электродинамики','Освоить оптические эксперименты'],
+    tasks:['Решать задачи по механике','Собрать простую электрическую схему','Провести опыт с линзой'],
+    stations:[{id:1,title:'Маятник',short:'Измеряем период'},{id:2,title:'Установка',short:'Практика безопасности'}],
+    shots:[]},
+  {id:2,title:'Информатика',desc:'Программирование, алгоритмы, схемотехника',company:'OpenEdu',proprietary:false,
+    duration:'12 уроков, 4 практики',tags:['программирование','системы'],lessons:12,
+    goals:['Научиться писать программы','Понять алгоритмы','Освоить базовую схемотехнику'],
+    tasks:['Написать приложение на C++','Реализовать структуру данных','Собрать макет схемы'],
+    stations:[{id:1,title:'IDE: практика',short:'Настройка окружения'},{id:2,title:'Алгоритм: сортировка',short:'Реализация и тесты'}],
+    shots:[]},
+  {id:3,title:'Медицина',desc:'Анатомия, биология, практики',company:'MedLab',proprietary:true,
+    duration:'8 уроков, 5 практик',tags:['медицина','лабы'],lessons:8,
+    goals:['Изучить анатомию','Овладеть лабораторными методами','Сформировать клиническое мышление'],
+    tasks:['Разбор органов','Микроскопические наблюдения','Отчёт по практике'],
+    stations:[{id:1,title:'Микроскопия',short:'Приготовление препарата'},{id:2,title:'Анатомия',short:'Разбор структуры'}],
+    shots:[]},
+  {id:4,title:'Химия',desc:'Органика, неорганика, лабораторные',company:'ChemLab',proprietary:true,
+    duration:'10 уроков, 6 практик',tags:['химия','аналитика'],lessons:10,
+    goals:['Понять органику','Освоить аналитические методы','Развить лабораторные навыки'],
+    tasks:['Провести титрование','Анализ образцов','Составить отчёт'],
+    stations:[{id:1,title:'Титрование',short:'Определение концентрации'},{id:2,title:'Органика',short:'Синтез малой молекулы'}],
+    shots:[]},
+  {id:5,title:'Инженерия',desc:'Проектирование, CAD, робототехника',company:'MechWorks',proprietary:false,
+    duration:'14 уроков, 6 практик',tags:['инженерия','роботы'],lessons:14,
+    goals:['Освоить CAD','Понять основы проектирования','Собрать базового робота'],
+    tasks:['Создать чертёж в CAD','Написать управляющую прошивку','Собрать прототип'],
+    stations:[{id:1,title:'CAD: моделирование',short:'Создание чертежа'},{id:2,title:'Робототехника',short:'Сборка и тесты'}],
+    shots:[]},
+  {id:6,title:'Геология',desc:'Разведка, бурение, анализ образцов',company:'GeoTech',proprietary:true,
+    duration:'11 уроков, 4 практики',tags:['геология'],lessons:11,
+    goals:['Изучить методы разведки','Понять принципы бурения','Работа с образцами'],
+    tasks:['Составить профиль местности','Провести бурение в симуляторе','Анализ керна'],
+    stations:[{id:1,title:'Разведка',short:'Сбор данных'},{id:2,title:'Бурение',short:'Симуляция'}],
+    shots:[]},
+  {id:7,title:'Экология',desc:'Мониторинг, анализ среды, графики',company:'EcoLab',proprietary:false,
+    duration:'7 уроков, 3 практики',tags:['экология'],lessons:7,
+    goals:['Научиться мониторить среду','Понять влияние факторов','Работа с данными'],
+    tasks:['Снять данные мониторинга','Анализ показателей','Построить графики'],
+    stations:[{id:1,title:'Мониторинг',short:'Сбор данных'},{id:2,title:'Анализ',short:'Постобработка'}],
+    shots:[]},
+  {id:8,title:'Энергетика',desc:'Сети, ТЭС, модели отказов',company:'EnerSys',proprietary:true,
+    duration:'13 уроков, 5 практик',tags:['энергетика'],lessons:13,
+    goals:['Понять энергосистемы','Изучить модели отказов','Освоить проектирование сети'],
+    tasks:['Симуляция сети','Расчёт нагрузок','Анализ отказов'],
+    stations:[{id:1,title:'Моделирование',short:'Расчёт сетей'},{id:2,title:'Практика',short:'Диагностика'}],
+    shots:[]},
+  {id:9,title:'Микроэлектроника',desc:'Микроконтроллеры, схемы, прошивки',company:'MicroFab',proprietary:false,
+    duration:'15 уроков, 7 практик',tags:['электроника'],lessons:15,
+    goals:['Освоить микроконтроллеры','Понять схемотехнику','Научиться прошивать устройства'],
+    tasks:['Собрать плату','Прописать прошивку','Тестирование устройств'],
+    stations:[{id:1,title:'MCU: старт',short:'Blink & setup'},{id:2,title:'Сборка платы',short:'Пайка и тесты'}],
+    shots:[]}
+];
+/* ====== Конец данных ====== */
+
+function getIdFromUrl(){
+  const p = new URLSearchParams(window.location.search);
+  const id = parseInt(p.get('id'),10);
+  return Number.isInteger(id) ? id : null;
+}
+
+function renderCourse(id){
+  const course = courses.find(c=>c.id===id);
+  if(!course){
+    document.getElementById('courseTitle').textContent = 'Курс не найден';
+    document.getElementById('aboutText').textContent = '';
+    return;
+  }
+
+  document.title = `Виртуальный кампус — ${course.title}`;
+  document.getElementById('courseTitle').textContent = course.title;
+  document.getElementById('courseDesc').textContent = course.desc;
+  document.getElementById('aboutText').textContent = course.desc + ' — учебная программа с практическими станками и модулями.';
+
+  // badges
+  const badges = document.getElementById('badges');
+  badges.innerHTML = '';
+  badges.appendChild(makeBadge(course.company));
+  badges.appendChild(makeBadge(course.tags.join(', ')));
+
+  // sidebar
+  document.getElementById('devName').textContent = course.company;
+  document.getElementById('devInfo').textContent = course.proprietary ? 'Проприетарный курс' : 'Открытый курс';
+  document.getElementById('typeText').textContent = course.proprietary ? 'Проприетарный' : 'Открытый';
+  document.getElementById('typePill').textContent = course.proprietary ? 'PROPRIETARY' : 'OPEN';
+  document.getElementById('duration').textContent = course.duration;
+  document.getElementById('lessonsCount').textContent = course.lessons;
+  document.getElementById('accessInfo').textContent = course.proprietary ? 'Доступ по лицензии' : 'Публичный доступ';
+
+  // tags cloud
+  const tagCloud = document.getElementById('tagCloud'); tagCloud.innerHTML='';
+  course.tags.forEach(t=>{ const el = document.createElement('div'); el.className='tag'; el.textContent = '#'+t; tagCloud.appendChild(el); });
+
+  // goals
+  const goals = document.getElementById('goalsList'); goals.innerHTML='';
+  (course.goals||[]).forEach(g=>{ const li=document.createElement('li'); li.textContent=g; goals.appendChild(li); });
+
+  // tasks
+  const tasks = document.getElementById('tasksList'); tasks.innerHTML='';
+  (course.tasks||[]).forEach(t=>{ const li=document.createElement('li'); li.textContent=t; tasks.appendChild(li); });
+
+  // stations
+  const stList = document.getElementById('stationsList'); stList.innerHTML='';
+  (course.stations||[]).forEach(s=>{
+    const box = document.createElement('div'); box.className='station';
+    box.innerHTML = `<div class="s-title">${s.title}</div><div style="color:var(--muted);font-size:13px">${s.short}</div><div style="margin-top:8px;text-align:right"><button class="s-cta" data-cid="${course.id}" data-sid="${s.id}">Открыть станок</button></div>`;
+    stList.appendChild(box);
+  });
+
+  // screenshots placeholders
+  const shots = document.getElementById('shots'); shots.innerHTML='';
+  if(course.shots && course.shots.length){
+    course.shots.forEach(src=>{
+      const el = document.createElement('div'); el.className='shot';
+      if(src){ el.style.backgroundImage=`url(${src})`; el.style.backgroundSize='cover'; el.textContent=''; }
+      else el.textContent = course.title[0];
+      shots.appendChild(el);
+    });
+  } else {
+    // show 3 placeholders
+    for(let i=0;i<3;i++){
+      const el = document.createElement('div'); el.className='shot'; el.textContent = course.title[0];
+      shots.appendChild(el);
+    }
+  }
+
+  // similar courses (by tags overlap)
+  const similar = document.getElementById('similarList'); similar.innerHTML='';
+  const sim = courses.filter(c=>c.id!==course.id).slice(0,4);
+  sim.forEach(s=>{
+    const card = document.createElement('div'); card.className='sim-card';
+    card.innerHTML = `<div style="font-weight:800">${s.title}</div><div style="color:var(--muted);font-size:13px">${s.company}</div><div style="margin-top:8px"><a href="course.html?id=${s.id}">Перейти</a></div>`;
+    similar.appendChild(card);
+  });
+
+  // handlers
+  document.getElementById('startBtn').onclick = ()=>alert('Запуск курса "'+course.title+'". (Заглушка)');
+  document.querySelectorAll('.s-cta').forEach(b=>b.addEventListener('click', e=>{
+    const cid = e.currentTarget.dataset.cid;
+    const sid = e.currentTarget.dataset.sid;
+    window.location.href = `station.html?course=${cid}&station=${sid}`;
+  }));
+}
+
+function makeBadge(text){
+  const d = document.createElement('div'); d.className='badge'; d.textContent = text; return d;
+}
+
+/* Запуск */
+const id = getIdFromUrl();
+renderCourse(id);
+
+/* ====== Поведение ссылки "К списку курсов" (надежный вариант) ====== */
+(function(){
+  const backLink = document.getElementById('backLink');
+  if(!backLink) return;
+
+  backLink.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    try {
+      const ref = document.referrer || '';
+      const canUseReferrer = ref.length > 0;
+
+      // Если есть реферер и он тот же origin, и в истории есть куда возвращаться — используем history.back()
+      if (canUseReferrer) {
+        const refOrigin = (new URL(ref)).origin;
+        if (refOrigin === location.origin && history.length > 1) {
+          history.back();
+
+          // Защита: если по какой-то причине остались на той же странице — перекидываем на index.html
+          setTimeout(() => {
+            if (location.pathname.endsWith('course.html') || location.pathname.endsWith('/course.html')) {
+              location.href = 'index.html';
+            }
+          }, 300);
+          return;
+        }
+      }
+    } catch (err) {
+      // fallback дальше
+    }
+
+    // Фолбэк: напрямую открываем index.html
+    window.location.href = 'index.html';
+  });
+})();
+</script>
+</body>
+</html>
